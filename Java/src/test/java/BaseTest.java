@@ -1,13 +1,16 @@
-import models.MilitaryType;
+import Planes.ExperimentalPlane;
 import Planes.MilitaryPlane;
 import Planes.PassengerPlane;
 import Planes.Plane;
+import models.ClassificationLevel;
+import models.ExperimentalTypes;
+import models.MilitaryType;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Runner {
-    static List<Plane> planes = Arrays.asList(
+public class BaseTest {
+    private static List<Plane> planes = Arrays.asList(
             new PassengerPlane("Boeing-737", 900, 12000, 60500, 164),
             new PassengerPlane("Boeing-737-800", 940, 12300, 63870, 192),
             new PassengerPlane("Boeing-747", 980, 16100, 70500, 242),
@@ -21,20 +24,22 @@ public class Runner {
             new MilitaryPlane("B-52 Stratofortress", 1000, 20000, 80000, MilitaryType.BOMBER),
             new MilitaryPlane("F-15", 1500, 12000, 10000, MilitaryType.FIGHTER),
             new MilitaryPlane("F-22", 1550, 13000, 11000, MilitaryType.FIGHTER),
-            new MilitaryPlane("C-130 Hercules", 650, 5000, 110000, MilitaryType.TRANSPORT)
+            new MilitaryPlane("C-130 Hercules", 650, 5000, 110000, MilitaryType.TRANSPORT),
+            new ExperimentalPlane("Bell X-14", 277, 482, 500, ExperimentalTypes.HIGH_ALTITUDE, ClassificationLevel.SECRET),
+            new ExperimentalPlane("Ryan X-13 Vertijet", 560, 307, 500, ExperimentalTypes.VTOL, ClassificationLevel.TOP_SECRET)
     );
 
-    public static void main(String[] args) {
-        Airport airport = new Airport(planes);
-        Airport militaryAirport = new Airport(airport.getMilitaryPlane());
-        Airport passengerAirport = new Airport(airport.getPassengerPlane());
-        System.out.println("Military airport sorted by max distance: " + militaryAirport
-                .sortByMaximumDistance()
-                .toString());
-        System.out.println("Passenger airport sorted by max speed: " + passengerAirport
-                .sortByMaximumSpeed()
-                .toString());
-
-        System.out.println("Plane with max passenger capacity: " + passengerAirport.getPassengerPlaneWithMaxPassengersCapacity());
+    protected static PassengerPlane planeWithMaxPassengerCapacity = new PassengerPlane("Boeing-747", 980, 16100, 70500, 242);
+    Airport airport;
+    @BeforeClass
+    public void setUp(){
+        airport = new Airport(planes);
     }
+
+    @AfterClass
+    public void tearDown(){
+        airport = null;
+    }
+
+
 }
